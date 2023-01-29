@@ -1,10 +1,8 @@
-# Declaratiile de variabile
+CFLAGS = -g -Wall -ggdb3 
+NCURSES = -lncurses
 CC = gcc
-CFLAGS = -g -Wall -lm -ggdb3
- 
-# Regula de compilare
-wordle: wordle.c
-	$(CC) -o wordle wordle.c $(CFLAGS) -lncursesw
 
+wordle: wordle.c
+	$(CC) -o wordle main.c wordle.c windows.c word.c $(CFLAGS) $(NCURSES)
 clean :
 	rm wordle
