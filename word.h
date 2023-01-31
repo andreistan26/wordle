@@ -2,6 +2,9 @@
 #define STRING_H
 
 #include <string.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include "utils.h"
 
 typedef struct{
     char    *value;
@@ -10,9 +13,11 @@ typedef struct{
 }word;
 
 word    *init_word();
-void    add_ch(word *str, const char c);
-int     remove_ch(word *str);
-void    clear_word(word *str);
-void    delete_word(word *str);
+int     word_append(word *word, const char c);
+int     word_remove(word *word);
+void    word_clear(word *word);
+void    word_delete(word *str);
 
+int     word_check(word *word, char *seeked_word);
+int     is_word_input(int key);
 #endif
