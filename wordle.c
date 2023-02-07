@@ -8,10 +8,11 @@ void wordle_init(){
     noecho();
     curs_set(0);
     start_color();
+    keypad(stdscr, 1);
     init_pair(NORMAL, COLOR_WHITE, COLOR_BLACK);
     init_pair(USED_KEY, COLOR_BLACK, COLOR_WHITE);
-    init_pair(EXACT_MATCH, COLOR_GREEN, COLOR_BLACK);
-    init_pair(PARTIAL_MATCH, COLOR_YELLOW, COLOR_BLACK);
+    init_pair(EXACT_MATCH, COLOR_BLACK, COLOR_GREEN);
+    init_pair(PARTIAL_MATCH, COLOR_BLACK, COLOR_YELLOW);
     init_pair(ALERT, COLOR_RED, COLOR_BLACK);
 }
 
@@ -76,22 +77,48 @@ WordleInputWin *current_input_win(AppData *app_data){
 void process_input(AppData *app_data){
     int input_key = getch();
     if(is_word_input(input_key)){
+        LOG_DEBUG("trying to append to win=%d, cur word=%s\n",
+                app_data->guess_idx, current_input_win(app_data)->word->value);
         if(word_append(current_input_win(app_data)->word, input_key) == 1){
-            draw_input_win(current_input_win(app_data), app_data->guess_idx);
+            draw_input_win(app_data->app_windows->input_wins, app_data->guess_idx, 0);
         }
-       //do input window logic
     }else if(input_key == KEY_BACKSPACE){
         if(word_remove(current_input_win(app_data)->word) == 1){
-            draw_input_win(current_input_win(app_data), app_data->guess_idx);
+            draw_input_win(app_data->app_windows->input_wins, app_data->guess_idx, 1);
         }
-    }else if(input_key == KEY_ENTER){
-        if(word_check(current_input_win(app_data)->word, app_data->seeked_word) == 1){
-            //check word 
-            //color word
-            //draw word
+    }else if(input_key == ENTER_KEY){
+        if(current_input_win(app_data)->word->len == WORD_SIZE){
+            int res = word_check(current_input_win(app_data)->word, app_data->seeked_word);
+            draw_guess(app_data->app_windows, app_data->guess_idx);
+            app_data->guess_idx++;
+            if(res == 1){
+                LOG_DEBUG("how the fuck have i got into here");
+                wordle_alert(win_alert, app_data->app_windows);
+                exit_game(app_data);
+            }
         }
-        //try and submit
     }else if(input_key == ctrl(KEY_QUIT_WORDLE)){
-        //quit game
+        exit_game(app_data);
     }
+}
+
+void exit_game(AppData *app_data){
+    free_win_bundle(app_data->app_windows);
+    for(int i = 0; i < app_data->dict_word_count; i++){
+        free(app_data->dict_words[i]);
+    }
+    free(app_data->dict_words);
+    free(app_data);
+    wclear(stdscr);
+    endwin();
+}
+
+int is_lost(AppData *app_data, int show_alert) {
+    if(app_data->guess_idx > GUESSES){
+        char message[BUFSIZ];
+        sprintf(message, lost_alert, app_data->seeked_word);
+        wordle_alert(message, app_data->app_windows);
+        return 1;
+    }
+    return 0;
 }

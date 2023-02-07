@@ -18,4 +18,11 @@
 #define LOG_INFO (fmt, ...) LOG("INFO" , LOG_PATH, fmt, ##__VA_ARGS__)
 #define LOG_DEBUG(fmt, ...) LOG("DEBUG", LOG_PATH, fmt, ##__VA_ARGS__)
 
+#define ASSERT_MSG(cond, fmt, ...) do{                  \
+    if(cond){                                           \
+        LOG("ASSERT", LOG_PATH, fmt, ##__VA_ARGS__);    \
+        exit(1);                                        \
+    }                                                   \
+}while(0)
+
 #endif

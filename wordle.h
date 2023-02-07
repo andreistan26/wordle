@@ -1,15 +1,18 @@
+#ifndef WORDLE_H
+#define WORDLE_H
+
 #include <ncurses.h>
 #include <stdlib.h>
 #include <time.h>
 #include <assert.h>
 #include "word.h"
 #include "windows.h"
+#include "utils.h"
 
 #define TRIM_LAST_CHAR(buf) ((buf[strlen(buf) - 1] = 0))
 
-typedef enum{
-    LOGO, GUESSES, KB 
-}WIN_IDX;
+static const char *win_alert = "You won!";
+static const char *lost_alert = "You lost word was %s :(";
 
 typedef enum{
     RUNNING, WON, LOST
@@ -37,3 +40,7 @@ static void quit_app(AppData *app_data);
 void        wordle_init();
 void        generate_random_word(AppData *app_data);
 void        process_input(AppData *app_data);
+int         is_lost(AppData *app_data, int show_alert);
+void        exit_game(AppData *app_data);
+
+#endif

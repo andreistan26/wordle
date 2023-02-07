@@ -41,7 +41,12 @@ void draw_keyboard(WordleKeyboardWin *keyboard_wins);
 void draw_all_input_win(WordleInputWin *input_wins);
 void draw_logo(WINDOW **logo_win);
 
-void draw_input_win(WordleInputWin *input_wins, int idx);
+void draw_input_win(WordleInputWin *input_wins, int idx, int erase);
 
-void draw_col_key(WordleKeyboardWin *keyboard_wins, char key, int color);
-void draw_col_word(WINDOW **input_wins, size_t idx, word *word);
+void draw_key(WordleKeyboardWin *keyboard_wins, char key, int color);
+
+void draw_guess(WinBundle *bundle, int idx);
+
+void free_win_bundle(WinBundle *bundle);
+
+void wordle_alert(const char *alert_message, WinBundle *bundle);
