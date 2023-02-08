@@ -10,7 +10,6 @@ WinBundle *init_win_bundle(size_t guesses){
         bundle->input_wins[i].word = init_word();
     }
     bundle->keyboard_wins = calloc(sizeof(WordleKeyboardWin), ALPH_SIZE);
-    
     return bundle;
 }
 
@@ -116,6 +115,13 @@ void draw_keyboard(WordleKeyboardWin *keyboard_wins){
 
 void draw_key(WordleKeyboardWin *keyboard_wins, char key, int color){
     WordleKeyboardWin *key_win = &keyboard_wins[key_2_idx[KEY_ALPH_IDX(key)]];
+    
+    // if color has lower priority then it should not overwrite
+    // ex: if key_win->color = EXACT_MATCH then USED_KEY should not overwrite
+    if(key_win->color > color){
+        return;
+    }
+
     key_win->color = color;
 
     if(color == NORMAL)

@@ -47,6 +47,8 @@ int word_check(word *word, char *seeked_word){
             continue;
         }
         winner = 0;
+    }
+    for(size_t i = 0; i < WORD_SIZE; i++){
         for(size_t j = 0; j < WORD_SIZE; j++)
             if(visited[j] == 0 && seeked_word[j] == word->value[i]){
                 word->color[i] = PARTIAL_MATCH;
