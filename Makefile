@@ -6,3 +6,5 @@ wordle: wordle.c
 	$(CC) -o wordle main.c wordle.c windows.c word.c $(CFLAGS) $(NCURSES)
 clean :
 	rm wordle
+run : 
+	./wordle 2> logs.log

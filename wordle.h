@@ -42,5 +42,5 @@ void        generate_random_word(AppData *app_data);
 void        process_input(AppData *app_data);
 int         is_lost(AppData *app_data, int show_alert);
 void        exit_game(AppData *app_data);
-
+int         is_valid_word(AppData *app_data, word *word);
 #endif

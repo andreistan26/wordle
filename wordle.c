@@ -81,6 +81,8 @@ void process_input(AppData *app_data){
                 app_data->guess_idx, current_input_win(app_data)->word->value);
         if(word_append(current_input_win(app_data)->word, input_key) == 1){
             draw_input_win(app_data->app_windows->input_wins, app_data->guess_idx, 0);
+        }else{
+
         }
     }else if(input_key == KEY_BACKSPACE){
         if(word_remove(current_input_win(app_data)->word) == 1){
@@ -88,11 +90,13 @@ void process_input(AppData *app_data){
         }
     }else if(input_key == ENTER_KEY){
         if(current_input_win(app_data)->word->len == WORD_SIZE){
+            if(!is_valid_word(app_data, current_input_win(app_data)->word)){
+                return;
+            }
             int res = word_check(current_input_win(app_data)->word, app_data->seeked_word);
             draw_guess(app_data->app_windows, app_data->guess_idx);
             app_data->guess_idx++;
             if(res == 1){
-                LOG_DEBUG("how the fuck have i got into here");
                 wordle_alert(win_alert, app_data->app_windows);
                 exit_game(app_data);
             }
@@ -113,8 +117,16 @@ void exit_game(AppData *app_data){
     endwin();
 }
 
+int is_valid_word(AppData *app_data, word *word){
+    int res = word_bsearch(word, app_data->dict_words, app_data->dict_word_count);
+    if(res == 0){
+        wordle_alert("Your input is not a valid word", app_data->app_windows);
+    }
+    return res;
+}
+
 int is_lost(AppData *app_data, int show_alert) {
-    if(app_data->guess_idx > GUESSES){
+    if(app_data->guess_idx >= GUESSES){
         char message[BUFSIZ];
         sprintf(message, lost_alert, app_data->seeked_word);
         wordle_alert(message, app_data->app_windows);

@@ -58,6 +58,24 @@ int word_check(word *word, char *seeked_word){
     return winner;
 }
 
+int word_bsearch(word *w, char **word_list, size_t word_list_len){
+    // unsigned would be unsafe
+    int l = 0, r = word_list_len;
+    while(l <= r){
+        int mid = (r + l) / 2;
+        int res = strcmp(w->value, word_list[mid]);
+        if(res > 0){
+            l = mid + 1;
+        }else if(res < 0){
+            r = mid -  1;
+        }else{
+            return mid;
+        }
+        LOG_DEBUG("in bsearch %d, mid word is %s, l:%d, r:%d", mid, word_list[mid], l, r);
+    }
+    return 0;
+}
+
 int is_word_input(int key){
     return isalpha(key);
 }

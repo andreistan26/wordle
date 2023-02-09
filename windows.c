@@ -145,8 +145,8 @@ void wordle_alert(const char *alert_message, WinBundle *bundle){
 
     x = x * x_scale;
     y = y + y_gap;
-
-    WINDOW *alert_win = newwin(3, strlen(alert_message) + 2, y, x);
+    size_t msg_len = strlen(alert_message);
+    WINDOW *alert_win = newwin(3, msg_len + 2, y, x - msg_len / 2);
     
     wattron(alert_win, COLOR_PAIR(ALERT));
     mvwprintw(alert_win, 1, 1, "%s", alert_message);
