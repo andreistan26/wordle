@@ -1,9 +1,10 @@
 CFLAGS = -g -Wall -ggdb3 
 NCURSES = -lncurses
+CURL = -lcurl
 CC = gcc
 
-wordle: wordle.c
-	$(CC) -o wordle main.c wordle.c windows.c word.c $(CFLAGS) $(NCURSES)
+wordle: 
+	$(CC) -o wordle $(wildcard src/*.c) $(CFLAGS) $(NCURSES) $(CURL)
 clean :
 	rm wordle
 run : 
