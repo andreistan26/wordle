@@ -37,7 +37,6 @@ AppData *init_app_data(Options opts){
         app_data->seeked_word = get_wordle();
         // TODO check it is in legal dict
     } else {
-        LOG_DEBUG("opening %s\n", default_dict_wordle);
         generate_random_word(app_data, default_dict_wordle);
     }
     LOG_DEBUG("%s", app_data->seeked_word);
@@ -46,7 +45,6 @@ AppData *init_app_data(Options opts){
 }
 
 static void load_dict(AppData* app_data, char *legal_words_path){
-    LOG_DEBUG("opening %s\n", legal_words_path);
     FILE *dict_file;
     if((dict_file = fopen(legal_words_path, "rb")) == NULL){
         fprintf(stderr, "Could not open dictionary file with path : %s", legal_words_path);
@@ -134,7 +132,12 @@ void process_input(AppData *app_data){
                 exit_game(app_data);
             }
         }
-    }else if(input_key == ctrl(KEY_QUIT_WORDLE)){
+    } else if (input_key == KEY_RESIZE) {
+        wclear(stdscr);
+        draw_all_input_win(app_data->app_windows->input_wins);
+        draw_keyboard(app_data->app_windows->keyboard_wins);
+        draw_logo(app_data->app_windows->logo_win);
+    } else if (input_key == ctrl(KEY_QUIT_WORDLE)){
         exit_game(app_data);
     }
 }
