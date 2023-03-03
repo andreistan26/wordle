@@ -35,7 +35,6 @@ AppData *init_app_data(Options opts){
 
     if(opts.official_word == 1) {
         app_data->seeked_word = get_wordle();
-        LOG_DEBUG("got here");
         // TODO check it is in legal dict
     } else {
         LOG_DEBUG("opening %s\n", default_dict_wordle);

@@ -3,7 +3,7 @@
 char *generate_current_query(){
     time_t t = time(NULL);
     struct tm tm = *localtime(&t);
-    char * query = generate_query(tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday);
+    char *query = generate_query(tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday);
     return query;
 }
 
@@ -55,6 +55,9 @@ char *parse_json_response(response *resp){
 
 char *get_wordle(){
     char *query = generate_current_query();
+#ifndef DEBUG 
+    LOG_DEBUG("query: %s", query);
+#endif
     response *resp = get_response(query);
     char *wordle = parse_json_response(resp);
 

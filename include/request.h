@@ -2,6 +2,7 @@
 #define REQUEST_H
 
 #include "curl/curl.h"
+#include "log.h"
 #include "time.h"
 #include "string.h"
 #include "stdlib.h"
@@ -13,7 +14,7 @@ typedef struct {
     char    *data;
 } response ;
 
-static const char *req = "https://www.nytimes.com/svc/wordle/v2/%d-%02d-%02.json";
+static const char *req = "https://www.nytimes.com/svc/wordle/v2/%d-%02d-%02d.json";
 
 char *          generate_query(int year, int month, int day);
 char *          generate_current_query();

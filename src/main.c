@@ -6,12 +6,12 @@
 
 int main(int argc, char **argv) {
     Options opts = {
-        .official_word = false,
-        .dict_path = NULL,
+        .official_word  = 0,
+        .dict_path      = NULL,
     };
 
     int c;
-    while((c = getopt(argc, argv, "od:")) != -1) {
+    while((c = getopt(argc, argv, "hod:")) != -1) {
         switch(c) {
             case 'o': 
                 opts.official_word = 1;
@@ -20,9 +20,18 @@ int main(int argc, char **argv) {
                 if(opts.official_word == 0)
                     opts.dict_path = optarg;
                 break;
+            case 'h':
+                printf("wordle: a tui implementation of the popular wordle game\n");
+                printf("usage: %s [-d dict_dir] [-o]\n\n", argv[0]);
+                printf("-o\t\tplay the official wordle of the day\n");
+                printf("-d <directory>\tchange the default dictionary\n");
+                printf("\t\tthe files should match *legal.txt and *wordles.txt\n");
+                return 0;
+            case '?':
+                return 0;
             default:
                 printf("Unknown arguments provided %c\n", c);
-                exit(1);
+                abort();
                 break;
         }
     }
